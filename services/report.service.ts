@@ -12,64 +12,39 @@ interface EmployeeReport extends MonthlyReport {
 export async function getMonthlyReports(): Promise<MonthlyReport[]> {
   const supabase = await createClient();
 
-  const start = new Date(
-    new Date().getFullYear(),
-    new Date().getMonth(),
-    1
-  );
+  // Últimos 30 días
+  const start = new Date();
+  start.setDate(start.getDate() - 30);
 
-  const [
-    punchesResult,
-    profilesResult,
-  ] = await Promise.all([
-    supabase
-      .from("punches")
-      .select("*")
-      .gte(
-        "created_at",
-        start.toISOString()
-      )
-      .order("created_at"),
+  const { data: punches, error: punchesError } = await supabase
+    .from("punches")
+    .select("*")
+    .gte("created_at", start.toISOString())
+    .order("created_at");
 
-    supabase
-      .from("profiles")
-      .select("id,full_name"),
-  ]);
+  if (punchesError) throw punchesError;
 
-  if (punchesResult.error) {
-    throw punchesResult.error;
+  const { data: profiles, error: profilesError } = await supabase
+    .from("profiles")
+    .select("id,full_name");
+
+  if (profilesError) throw profilesError;
+
+  const profileMap = new Map<string, string>();
+
+  for (const profile of profiles ?? []) {
+    profileMap.set(profile.id, profile.full_name);
   }
 
-  if (profilesResult.error) {
-    throw profilesResult.error;
-  }
+  const reports = new Map<string, EmployeeReport>();
 
-  const profileMap = new Map<
-    string,
-    string
-  >();
-
-  for (const profile of profilesResult.data ?? []) {
-    profileMap.set(
-      profile.id,
-      profile.full_name
-    );
-  }
-
-  const reports = new Map<
-    string,
-    EmployeeReport
-  >();
-
-  for (const row of punchesResult.data as Punch[] ?? []) {
-    const employeeId = row.user_id;
+  for (const punch of (punches as Punch[]) ?? []) {
+    const employeeId = punch.user_id;
 
     if (!reports.has(employeeId)) {
       reports.set(employeeId, {
         employeeId,
-        employee:
-          profileMap.get(employeeId) ??
-          "Empleado",
+        employee: profileMap.get(employeeId) ?? "Empleado",
         workedMinutes: 0,
         overtimeMinutes: 0,
         lateMinutes: 0,
@@ -81,37 +56,25 @@ export async function getMonthlyReports(): Promise<MonthlyReport[]> {
     const report = reports.get(employeeId)!;
 
     report.punches++;
-    report.__punches.push(row);
+    report.__punches.push(punch);
   }
 
   const result: MonthlyReport[] = [];
 
   for (const report of reports.values()) {
-    const calculation =
-      calculateReport(
-        report.__punches
-      );
+    const calculation = calculateReport(report.__punches);
 
     result.push({
-      employeeId:
-        report.employeeId,
-
-      employee:
-        report.employee,
-
-      workedMinutes:
-        calculation.workedMinutes,
-
-      overtimeMinutes:
-        calculation.overtimeMinutes,
-
-      lateMinutes:
-        calculation.lateMinutes,
-
-      punches:
-        report.punches,
+      employeeId: report.employeeId,
+      employee: report.employee,
+      punches: report.punches,
+      workedMinutes: calculation.workedMinutes,
+      overtimeMinutes: calculation.overtimeMinutes,
+      lateMinutes: calculation.lateMinutes,
     });
   }
 
-  return result;
+  return result.sort((a, b) =>
+    a.employee.localeCompare(b.employee)
+  );
 }
