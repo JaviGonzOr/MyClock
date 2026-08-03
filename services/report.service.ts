@@ -12,7 +12,6 @@ interface EmployeeReport extends MonthlyReport {
 export async function getMonthlyReports(): Promise<MonthlyReport[]> {
   const supabase = await createClient();
 
-  // Últimos 30 días
   const start = new Date();
   start.setDate(start.getDate() - 30);
 

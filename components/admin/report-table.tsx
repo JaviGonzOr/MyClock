@@ -2,7 +2,12 @@ import { getMonthlyReports } from "@/services/report.service";
 import { ReportSummary } from "./report-summary";
 
 export async function ReportTable() {
-  const reports = await getMonthlyReports();
+  const today = new Date();
+
+  const reports = await getMonthlyReports(
+    today.getFullYear(),
+    today.getMonth(),
+  );
 
   return (
     <div className="space-y-8">

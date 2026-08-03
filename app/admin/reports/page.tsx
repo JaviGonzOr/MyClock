@@ -11,17 +11,12 @@ export default function ReportsPage() {
       />
 
       <div className="space-y-8 p-8">
-
         <div className="flex justify-end">
-
           <ExportReportButton />
-
         </div>
 
         <ReportTable />
-
       </div>
-
     </>
   );
 }
