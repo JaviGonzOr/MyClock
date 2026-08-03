@@ -2,12 +2,7 @@ import { getMonthlyReports } from "@/services/report.service";
 import { ReportSummary } from "./report-summary";
 
 export async function ReportTable() {
-  const today = new Date();
-
-  const reports = await getMonthlyReports(
-    today.getFullYear(),
-    today.getMonth(),
-  );
+  const reports = await getMonthlyReports();
 
   return (
     <div className="space-y-8">
@@ -17,25 +12,15 @@ export async function ReportTable() {
         <table className="w-full">
           <thead>
             <tr className="border-b">
-              <th className="p-4 text-left text-slate-700">
-                Empleado
-              </th>
+              <th className="p-4 text-left text-slate-700">Empleado</th>
 
-              <th className="p-4 text-center text-slate-700">
-                Fichajes
-              </th>
+              <th className="p-4 text-center text-slate-700">Fichajes</th>
 
-              <th className="p-4 text-center text-slate-700">
-                Horas
-              </th>
+              <th className="p-4 text-center text-slate-700">Horas</th>
 
-              <th className="p-4 text-center text-slate-700">
-                Extra
-              </th>
+              <th className="p-4 text-center text-slate-700">Extra</th>
 
-              <th className="p-4 text-center text-slate-700">
-                Retrasos
-              </th>
+              <th className="p-4 text-center text-slate-700">Retrasos</th>
             </tr>
           </thead>
 
