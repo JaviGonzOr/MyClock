@@ -58,7 +58,10 @@ export default async function EmployeePage({
         </div>
 
         <div className="mx-auto max-w-3xl">
-          <EmployeeHistory punches={punches} />
+          <EmployeeHistory
+            punches={punches}
+            employeeId={employee.id}
+          />
         </div>
       </div>
     </>

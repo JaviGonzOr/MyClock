@@ -25,11 +25,6 @@ const items = [
     label: "Perfil",
     icon: User,
   },
-  {
-    href: "/settings",
-    label: "Ajustes",
-    icon: ChartColumn,
-  },
 ];
 
 export function BottomNav() {

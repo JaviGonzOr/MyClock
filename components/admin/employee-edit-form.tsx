@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Save } from "lucide-react";
 
-import { AvatarUpload } from "./avatar-upload";
+
 
 import { employeeService } from "@/services/employee.service";
 import { useSchedules } from "@/hooks/useSchedules";
@@ -65,8 +65,7 @@ export function EmployeeEditForm({ employee }: Props) {
 
   return (
     <div className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
-      <AvatarUpload id={employee.id} avatar={form.avatar_url} />
-
+      
       <div className="mt-8 space-y-6">
         <div>
           <label className="mb-2 block font-semibold text-slate-700">

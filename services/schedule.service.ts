@@ -4,8 +4,13 @@ import {
 } from "@/repositories/schedule.repository";
 
 class ScheduleService {
-  async assignToEmployee(employeeId: string, scheduleId: string | null) {
-    const { supabase } = await import("@/lib/supabase/client");
+  async assignToEmployee(
+    employeeId: string,
+    scheduleId: string | null
+  ) {
+    const { supabase } = await import(
+      "@/lib/supabase/client"
+    );
 
     const { error } = await supabase
       .from("profiles")
@@ -14,8 +19,11 @@ class ScheduleService {
       })
       .eq("id", employeeId);
 
-    if (error) throw error;
+    if (error) {
+      throw error;
+    }
   }
+
   list() {
     return scheduleRepository.all();
   }
@@ -28,7 +36,10 @@ class ScheduleService {
     return scheduleRepository.create(data);
   }
 
-  update(id: string, data: Partial<ScheduleData>) {
+  update(
+    id: string,
+    data: Partial<ScheduleData>
+  ) {
     return scheduleRepository.update(id, data);
   }
 
@@ -37,4 +48,5 @@ class ScheduleService {
   }
 }
 
-export const scheduleService = new ScheduleService();
+export const scheduleService =
+  new ScheduleService();

@@ -1,19 +1,69 @@
-import { SettingsForm } from "@/components/settings/settings-form";
+import { notFound } from "next/navigation";
 
-export default function SettingsPage() {
+import { AdminHeader } from "@/components/admin/admin-header";
+import { EmployeeActions } from "@/components/admin/employee-actions";
+import { EmployeeEditForm } from "@/components/admin/employee-edit-form";
+import { EmployeeHistory } from "@/components/admin/employee-history";
+import { EmployeeStats } from "@/components/admin/employee-stats";
+
+import {
+  getEmployee,
+  getEmployeePunches,
+} from "@/services/employee.server";
+
+import { getEmployeeStats } from "@/services/stats.service";
+
+export const dynamic = "force-dynamic";
+
+export default async function EmployeePage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
+
+  const employee = await getEmployee(id);
+
+  if (!employee) {
+    notFound();
+  }
+
+  const stats = await getEmployeeStats(id);
+  const punches = await getEmployeePunches(id);
+
   return (
-    <main className="min-h-screen bg-slate-100 p-6 lg:p-10">
-      <div className="mx-auto max-w-5xl">
-        <h1 className="text-4xl font-bold text-slate-900">
-          Ajustes
-        </h1>
+    <>
+      <AdminHeader
+        title={employee.full_name}
+        subtitle={employee.email}
+      />
 
-        <p className="mt-2 mb-8 text-slate-500">
-          Configuración general de MyClock.
-        </p>
+      <EmployeeStats
+        workedToday={stats.workedToday}
+        workedMonth={stats.workedMonth}
+        punchesToday={stats.punchesToday}
+        lastPunch={stats.lastPunch}
+      />
 
-        <SettingsForm />
+      <div className="px-8">
+        <EmployeeActions
+          id={employee.id}
+          active={employee.active}
+        />
       </div>
-    </main>
+
+      <div className="p-8 space-y-8">
+        <div className="mx-auto max-w-3xl">
+          <EmployeeEditForm employee={employee} />
+        </div>
+
+        <div className="mx-auto max-w-3xl">
+          <EmployeeHistory
+            punches={punches}
+            employeeId={employee.id}
+          />
+        </div>
+      </div>
+    </>
   );
 }

@@ -86,19 +86,7 @@ export function UserMenu({
             )}
           </Menu.Item>
 
-          <Menu.Item>
-            {({ active }) => (
-              <button
-                onClick={() => router.push("/admin/settings")}
-                className={`flex w-full items-center gap-3 px-5 py-4 text-slate-700 transition ${
-                  active ? "bg-slate-100" : ""
-                }`}
-              >
-                <Settings size={18} />
-                Ajustes
-              </button>
-            )}
-          </Menu.Item>
+        
 
           <div className="border-t border-slate-200" />
 

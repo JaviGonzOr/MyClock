@@ -1,5 +1,3 @@
-import Image from "next/image";
-
 import {
   getLiveEmployees,
 } from "@/services/live-dashboard.service";
@@ -10,54 +8,41 @@ export async function LiveEmployees() {
 
   return (
     <div className="rounded-3xl border border-slate-200 bg-white shadow-sm">
-
       <div className="border-b p-6">
-
         <h2 className="text-2xl font-bold text-slate-900">
           Estado de empleados
         </h2>
-
       </div>
 
       <div className="divide-y">
-
         {employees.map((employee) => {
-
-          const badge =
-            employee.working
-              ? {
-                  text: "Trabajando",
-                  className:
-                    "bg-green-100 text-green-700",
-                }
-              : {
-                  text: "Fuera",
-                  className:
-                    "bg-slate-100 text-slate-700",
-                };
+          const badge = employee.working
+            ? {
+                text: "Trabajando",
+                className:
+                  "bg-green-100 text-green-700",
+              }
+            : {
+                text: "Fuera",
+                className:
+                  "bg-slate-100 text-slate-700",
+              };
 
           return (
-
             <div
               key={employee.id}
               className="flex items-center justify-between p-5"
             >
-
               <div className="flex items-center gap-4">
-
-                <Image
-                  src={
-                    employee.avatar_url ??
-                    "/avatar-placeholder.png"
-                  }
-                  alt=""
-                  width={52}
-                  height={52}
-                  className="rounded-full"
-                />
+                <div className="flex h-[52px] w-[52px] items-center justify-center overflow-hidden rounded-full bg-slate-100">
+                  <img
+                    src="/mi_logo.png"
+                    alt="MyClock"
+                    className="h-full w-full object-contain p-1"
+                  />
+                </div>
 
                 <div>
-
                   <p className="font-semibold text-slate-900">
                     {employee.full_name}
                   </p>
@@ -69,9 +54,7 @@ export async function LiveEmployees() {
                         ).toLocaleString("es-ES")
                       : "Sin fichajes"}
                   </p>
-
                 </div>
-
               </div>
 
               <span
@@ -79,15 +62,10 @@ export async function LiveEmployees() {
               >
                 {badge.text}
               </span>
-
             </div>
-
           );
-
         })}
-
       </div>
-
     </div>
   );
 }
