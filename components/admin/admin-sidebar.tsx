@@ -9,7 +9,6 @@ import {
   Users,
   Clock3,
   FileText,
-  Clock3,
 } from "lucide-react";
 
 const items = [
