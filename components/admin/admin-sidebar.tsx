@@ -9,6 +9,7 @@ import {
   Users,
   Clock3,
   FileText,
+  Clock3,
 } from "lucide-react";
 
 const items = [
@@ -31,6 +32,11 @@ const items = [
     href: "/admin/reports",
     label: "Informes",
     icon: FileText,
+  },
+  {
+    href: "/dashboard",
+    label: "Mi jornada",
+    icon: Clock3,
   },
 ];
 
