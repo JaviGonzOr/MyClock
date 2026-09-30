@@ -4,6 +4,7 @@ import { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import {
   ChevronDown,
+  Clock3,
   LogOut,
   Settings,
   User,
@@ -88,8 +89,21 @@ export function UserMenu({
 
         
 
-          <div className="border-t border-slate-200" />
+          <Menu.Item>
+            {({ active }) => (
+              <button
+                onClick={() => router.push("/dashboard")}
+                className={`flex w-full items-center gap-3 px-5 py-4 text-slate-700 transition ${
+                  active ? "bg-slate-100" : ""
+                }`}
+              >
+                <Clock3 size={18} />
+                Mi jornada
+              </button>
+            )}
+          </Menu.Item>
 
+          <div className="border-t border-slate-200" />
           <Menu.Item>
             {({ active }) => (
               <button
